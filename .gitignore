@@ -1,0 +1,22 @@
+# Python / Django
+__pycache__/
+*.py[cod]
+*.sqlite3
+.env
+venv/
+env/
+*.egg-info/
+staticfiles/
+media/
+
+# Node / React
+node_modules/
+dist/
+.vite/
+npm-debug.log*
+
+# Editors
+.vscode/*
+!.vscode/extensions.json
+.idea/
+.DS_Store
