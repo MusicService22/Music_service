@@ -1,69 +1,131 @@
 # MusicService
 
-Каркас проекту: **React (Vite)** на фронтенді + **Django REST Framework** на бекенді.
+Базовий каркас музичного сервісу: **React (Vite)** на фронтенді + **Django REST Framework** на бекенді.
+
+## Що потрібно встановити
+
+- Python 3.12
+- Node.js 20+
+- npm 10+
+- Git
+
+У корені репозиторію є файли `.python-version` і `.node-version`, щоб команда орієнтувалася на однакові версії.
 
 ## Структура
 
-```
+```text
 MusicService/
 ├── backend/          # Django REST API
-│   ├── config/        # налаштування проекту (settings, urls)
-│   ├── api/            # застосунок з моделями Artist/Track, серіалізаторами, view'ами
+│   ├── config/       # settings, urls, wsgi/asgi
+│   ├── api/          # Artist/Track, serializers, views, urls, tests
 │   ├── manage.py
 │   └── requirements.txt
-├── frontend/          # React (Vite)
+├── frontend/         # React (Vite)
 │   ├── src/
-│   └── package.json
-└── .vscode/            # готові таски для VS Code
+│   ├── package.json
+│   └── vite.config.js
+└── .vscode/          # готові VS Code tasks
 ```
 
-## Запуск бекенду (Django)
+## Запуск backend
 
 ```bash
 cd backend
 python -m venv venv
-source venv/bin/activate        # Windows: venv\Scripts\activate
+```
+
+Windows PowerShell:
+
+```powershell
+.\venv\Scripts\Activate.ps1
+copy .env.example .env
 pip install -r requirements.txt
-cp .env.example .env
 python manage.py migrate
-python manage.py createsuperuser   # опційно, для адмінки
+python manage.py test
 python manage.py runserver
 ```
 
-API підніметься на `http://127.0.0.1:8000/`.
-Перевірка: `http://127.0.0.1:8000/api/health/` → `{"status": "ok"}`.
+macOS/Linux:
 
-## Запуск фронтенду (React)
+```bash
+source venv/bin/activate
+cp .env.example .env
+pip install -r requirements.txt
+python manage.py migrate
+python manage.py test
+python manage.py runserver
+```
+
+Backend буде доступний на `http://127.0.0.1:8000/`.
+
+Швидка перевірка:
+
+```text
+http://127.0.0.1:8000/api/health/
+```
+
+Очікувана відповідь:
+
+```json
+{"status": "ok"}
+```
+
+## Запуск frontend
 
 ```bash
 cd frontend
 npm install
+npm run lint
 npm run dev
 ```
 
-Фронтенд підніметься на `http://127.0.0.1:5173/` і автоматично проксує запити `/api/*` на Django (налаштовано в `vite.config.js`).
+Якщо PowerShell блокує команду `npm`, використовуйте `npm.cmd`:
 
-## Запуск обох сервісів у VS Code
+```powershell
+npm.cmd install
+npm.cmd run lint
+npm.cmd run dev
+```
 
-У корені проекту відкрий палітру команд (`Ctrl+Shift+P`) → **Tasks: Run Task** → **Run All**.
-Це запустить одночасно `Backend: runserver` і `Frontend: dev` (конфіг у `.vscode/tasks.json`).
+Frontend буде доступний на `http://127.0.0.1:5173/`.
 
-## Основні ендпоінти API
+Vite проксує запити `/api/*` на Django API `http://127.0.0.1:8000`.
 
-| Метод | URL                     | Опис                          |
-|-------|-------------------------|-------------------------------|
-| GET   | `/api/health/`          | перевірка, що API живе        |
-| GET   | `/api/artists/`         | список артистів                |
-| POST  | `/api/artists/`         | створити артиста                |
-| GET   | `/api/tracks/`          | список треків                   |
-| POST  | `/api/tracks/`          | створити трек                    |
-| POST  | `/api/token/`           | отримати JWT (access + refresh) |
-| POST  | `/api/token/refresh/`   | оновити access-токен            |
+## Основні API endpoints
+
+| Метод | URL                   | Опис |
+| ----- | --------------------- | ---- |
+| GET   | `/api/health/`        | перевірка, що API працює |
+| GET   | `/api/artists/`       | список артистів |
+| POST  | `/api/artists/`       | створити артиста |
+| GET   | `/api/tracks/`        | список треків |
+| POST  | `/api/tracks/`        | створити трек |
+| POST  | `/api/token/`         | отримати JWT access/refresh |
+| POST  | `/api/token/refresh/` | оновити access token |
+
+## Запуск через VS Code
+
+У корені проекту відкрийте Command Palette:
+
+```text
+Ctrl+Shift+P -> Tasks: Run Task -> Run All
+```
+
+Це запустить backend і frontend паралельно через конфіг `.vscode/tasks.json`.
+
+## Definition of Done для стабільного старту
+
+- `npm install` проходить без `--legacy-peer-deps`.
+- `npm run lint` проходить без помилок.
+- `python manage.py migrate` створює таблиці для `Artist` і `Track`.
+- `python manage.py test` проходить.
+- `/api/health/` повертає `{"status": "ok"}`.
+- React-сторінка показує статус Django API.
 
 ## Наступні кроки для команди
 
-- [ ] Підʼєднати репозиторій до `https://github.com/MusicService22`
-- [ ] Замінити SQLite на PostgreSQL для продакшена
-- [ ] Додати CI (лінтер + тести) через GitHub Actions
-- [ ] Продумати доменну модель (плейлисти, користувачі, лайки тощо)
-- [ ] Додати Docker/Docker Compose, якщо потрібно однакове середовище для всіх
+- Додати моделі `Album`, `Playlist`, `Favorite`.
+- Додати реєстрацію користувача та endpoint `/api/me/`.
+- Зробити сторінки `Tracks`, `Artists`, `Login`, `Register`.
+- Додати пошук і фільтрацію треків.
+- Додати CI через GitHub Actions.
