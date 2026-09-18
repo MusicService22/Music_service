@@ -98,8 +98,16 @@ Vite проксує запити `/api/*` на Django API `http://127.0.0.1:8000
 | GET   | `/api/health/`        | перевірка, що API працює |
 | GET   | `/api/artists/`       | список артистів |
 | POST  | `/api/artists/`       | створити артиста |
+| GET   | `/api/albums/`        | список альбомів |
+| POST  | `/api/albums/`        | створити альбом |
 | GET   | `/api/tracks/`        | список треків |
 | POST  | `/api/tracks/`        | створити трек |
+| GET   | `/api/playlists/`     | список публічних або власних плейлистів |
+| POST  | `/api/playlists/`     | створити плейлист |
+| GET   | `/api/favorites/`     | список власних обраних треків |
+| POST  | `/api/favorites/`     | додати трек в обране |
+| GET   | `/api/profiles/`      | профіль поточного користувача |
+| POST  | `/api/profiles/`      | створити профіль поточного користувача |
 | POST  | `/api/token/`         | отримати JWT access/refresh |
 | POST  | `/api/token/refresh/` | оновити access token |
 
@@ -117,14 +125,13 @@ Ctrl+Shift+P -> Tasks: Run Task -> Run All
 
 - `npm install` проходить без `--legacy-peer-deps`.
 - `npm run lint` проходить без помилок.
-- `python manage.py migrate` створює таблиці для `Artist` і `Track`.
+- `python manage.py migrate` створює таблиці для `Artist`, `Album`, `Track`, `Playlist`, `Favorite`, `UserProfile`.
 - `python manage.py test` проходить.
 - `/api/health/` повертає `{"status": "ok"}`.
 - React-сторінка показує статус Django API.
 
 ## Наступні кроки для команди
 
-- Додати моделі `Album`, `Playlist`, `Favorite`.
 - Додати реєстрацію користувача та endpoint `/api/me/`.
 - Зробити сторінки `Tracks`, `Artists`, `Login`, `Register`.
 - Додати пошук і фільтрацію треків.
