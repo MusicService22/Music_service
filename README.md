@@ -74,6 +74,7 @@ http://127.0.0.1:8000/api/health/
 
 ```bash
 cd frontend
+cp .env.example .env
 npm install
 npm run lint
 npm run dev
@@ -82,6 +83,7 @@ npm run dev
 Якщо PowerShell блокує команду `npm`, використовуйте `npm.cmd`:
 
 ```powershell
+copy .env.example .env
 npm.cmd install
 npm.cmd run lint
 npm.cmd run dev
@@ -90,6 +92,7 @@ npm.cmd run dev
 Frontend буде доступний на `http://127.0.0.1:5173/`.
 
 Vite проксує запити `/api/*` на Django API `http://127.0.0.1:8000`.
+Base URL для API налаштовується у `frontend/.env` через `VITE_API_BASE_URL`.
 
 ## Основні API endpoints
 
