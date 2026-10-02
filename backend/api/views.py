@@ -1,8 +1,11 @@
 from django.db.models import Q
 from rest_framework import viewsets, permissions
 from rest_framework.decorators import api_view, permission_classes
+from rest_framework import viewsets, permissions, filters
+from rest_framework.decorators import api_view
 from rest_framework.response import Response
 
+from .filters import TrackFilter
 from .models import Album, Artist, Favorite, Playlist, Track, UserProfile
 from .serializers import (
     AlbumSerializer,
@@ -31,6 +34,11 @@ class TrackViewSet(viewsets.ModelViewSet):
     queryset = Track.objects.select_related('artist', 'album').all()
     serializer_class = TrackSerializer
     permission_classes = [permissions.IsAuthenticatedOrReadOnly]
+
+    filterset_class = TrackFilter
+    search_fields = ['title', 'artist__name', 'album__title', 'genre']
+    ordering_fields = ['title', 'duration_seconds', 'track_number', 'created_at']
+    ordering = ['artist__name', 'album__title', 'track_number', 'title']
 
 
 class PlaylistViewSet(viewsets.ModelViewSet):
