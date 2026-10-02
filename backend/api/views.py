@@ -1,12 +1,13 @@
 from django.db.models import Q
 from rest_framework import viewsets, permissions
-from rest_framework.decorators import api_view
+from rest_framework.decorators import api_view, permission_classes
 from rest_framework.response import Response
 
 from .models import Album, Artist, Favorite, Playlist, Track, UserProfile
 from .serializers import (
     AlbumSerializer,
     ArtistSerializer,
+    CurrentUserSerializer,
     FavoriteSerializer,
     PlaylistSerializer,
     TrackSerializer,
@@ -77,3 +78,12 @@ class UserProfileViewSet(viewsets.ModelViewSet):
 def health_check(request):
     """Простий ендпоінт для перевірки, що API живе."""
     return Response({'status': 'ok'})
+
+
+@api_view(['GET'])
+@permission_classes([permissions.IsAuthenticated])
+def current_user(request):
+    UserProfile.objects.get_or_create(user=request.user)
+    serializer = CurrentUserSerializer(request.user, context={'request': request})
+
+    return Response(serializer.data)

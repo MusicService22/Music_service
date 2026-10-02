@@ -1,3 +1,4 @@
+from django.contrib.auth import get_user_model
 from rest_framework import serializers
 
 from .models import Album, Artist, Favorite, Playlist, PlaylistTrack, Track, UserProfile
@@ -61,6 +62,14 @@ class UserProfileSerializer(serializers.ModelSerializer):
         model = UserProfile
         fields = ['id', 'user', 'username', 'display_name', 'bio', 'avatar', 'created_at', 'updated_at']
         read_only_fields = ['user']
+
+
+class CurrentUserSerializer(serializers.ModelSerializer):
+    profile = UserProfileSerializer(read_only=True)
+
+    class Meta:
+        model = get_user_model()
+        fields = ['id', 'username', 'email', 'profile']
 
 
 class PlaylistTrackSerializer(serializers.ModelSerializer):
