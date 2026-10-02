@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import api from './api'
+import { apiClient } from './api'
 import './App.css'
 
 const featuredTracks = [
@@ -44,10 +44,10 @@ function App() {
   const [status, setStatus] = useState('перевірка...')
 
   useEffect(() => {
-    api
+    apiClient
       .get('health/')
-      .then((res) => setStatus(res.data.status))
-      .catch(() => setStatus('немає з’єднання з API'))
+      .then((data) => setStatus(data.status))
+      .catch((error) => setStatus(error.message))
   }, [])
 
   const isConnected = status === 'ok'
