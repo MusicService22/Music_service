@@ -111,6 +111,7 @@ Base URL для API налаштовується у `frontend/.env` через `
 | POST  | `/api/favorites/`     | додати трек в обране |
 | GET   | `/api/profiles/`      | профіль поточного користувача |
 | POST  | `/api/profiles/`      | створити профіль поточного користувача |
+| GET   | `/api/me/`            | дані поточного авторизованого користувача |
 | POST  | `/api/token/`         | отримати JWT access/refresh |
 | POST  | `/api/token/refresh/` | оновити access token |
 
@@ -135,7 +136,7 @@ Ctrl+Shift+P -> Tasks: Run Task -> Run All
 
 ## Наступні кроки для команди
 
-- Додати реєстрацію користувача та endpoint `/api/me/`.
+- Додати реєстрацію користувача.
 - Зробити сторінки `Tracks`, `Artists`, `Login`, `Register`.
 - Додати пошук і фільтрацію треків.
 - Додати CI через GitHub Actions.
