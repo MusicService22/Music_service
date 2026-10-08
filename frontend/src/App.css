@@ -564,3 +564,45 @@ button {
     left: 10px;
   }
 }
+.favorite-button {
+  width: 32px;
+  height: 32px;
+}
+
+.favorite-button[aria-pressed="true"] {
+  color: #bf5947;
+}
+
+.favorite-button:disabled {
+  opacity: 0.6;
+  cursor: default;
+}
+
+.track-meta:has(.favorite-button) strong {
+  margin-left: auto;
+}
+
+.content-section > a {
+  display: inline-block;
+  margin-bottom: 12px;
+  color: #31785d;
+  font-weight: 700;
+  text-decoration: none;
+}
+
+.content-section form {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 14px;
+}
+
+.content-section form input {
+  flex: 1;
+  max-width: 360px;
+  height: 38px;
+  border: 1px solid #d7dfd5;
+  border-radius: 8px;
+  padding: 0 12px;
+  background: #ffffff;
+  font: inherit;
+}

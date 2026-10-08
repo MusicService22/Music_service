@@ -1,6 +1,10 @@
 import { useEffect, useState } from 'react'
 import api from './api'
 import './App.css'
+import { Link, Route, Routes, useLocation } from 'react-router-dom'
+import FavoriteButton from './components/FavoriteButton'
+import FavoritesPage from './pages/FavoritesPage'
+import PlaylistsPage from './pages/PlaylistsPage'
 
 const featuredTracks = [
   {
@@ -41,6 +45,8 @@ const quickPlaylists = [
 const artists = ['Mila Ray', 'Anton Vale', 'Sana Blue', 'Kolo Sound']
 
 function App() {
+    const { pathname } = useLocation()
+  const isHome = pathname === '/'
   const [status, setStatus] = useState('перевірка...')
 
   useEffect(() => {
@@ -66,6 +72,8 @@ function App() {
           <a className="nav-link" href="#artists">Artists</a>
           <a className="nav-link" href="#playlists">Playlists</a>
           <a className="nav-link" href="#favorites">Favorites</a>
+          <Link className="nav-link" to="/playlists">My playlists</Link>
+          <Link className="nav-link" to="/favorites">My favorites</Link>
         </nav>
 
         <section className="library-block" aria-labelledby="library-title">
@@ -94,6 +102,14 @@ function App() {
             <button className="primary-button" type="button">Sign up</button>
           </div>
         </header>
+        <Routes>
+          <Route path="/favorites" element={<FavoritesPage />} />
+          <Route path="/playlists" element={<PlaylistsPage />} />cd backend
+          <Route path="/" element={null} />
+        </Routes>
+
+        {isHome && (
+        <>
 
         <section className="overview-band" id="home">
           <div>
@@ -129,6 +145,7 @@ function App() {
                 <div className="track-meta">
                   <span>{track.mood}</span>
                   <strong>{track.duration}</strong>
+                  <FavoriteButton trackId={track.id} />
                 </div>
               </article>
             ))}
@@ -173,6 +190,8 @@ function App() {
             </div>
           </div>
         </section>
+                </>
+        )}
       </main>
 
       <footer className="player-bar" aria-label="Music player">
