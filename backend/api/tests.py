@@ -2,7 +2,7 @@ from django.contrib.auth import get_user_model
 from django.test import TestCase
 from rest_framework.test import APIClient
 
-from .models import Album, Artist, Favorite, Playlist, PlaylistTrack, Track
+from .models import Album, Artist, Favorite, Playlist, PlaylistTrack, Track, UserProfile
 
 
 class HealthCheckTests(TestCase):
@@ -63,3 +63,31 @@ class CatalogApiTests(TestCase):
 
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response.json()[0]['track']['title'], self.track.title)
+
+
+class CurrentUserApiTests(TestCase):
+    def setUp(self):
+        self.client = APIClient()
+        self.user = get_user_model().objects.create_user(
+            username='listener',
+            email='listener@example.com',
+            password='password123',
+        )
+        UserProfile.objects.create(user=self.user, display_name='Test Listener')
+
+    def test_me_requires_authentication(self):
+        response = self.client.get('/api/me/')
+
+        self.assertEqual(response.status_code, 401)
+
+    def test_me_returns_current_user_and_profile(self):
+        self.client.force_authenticate(user=self.user)
+
+        response = self.client.get('/api/me/')
+        data = response.json()
+
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(data['id'], self.user.id)
+        self.assertEqual(data['username'], self.user.username)
+        self.assertEqual(data['email'], self.user.email)
+        self.assertEqual(data['profile']['display_name'], 'Test Listener')
