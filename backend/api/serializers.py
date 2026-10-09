@@ -63,6 +63,19 @@ class UserProfileSerializer(serializers.ModelSerializer):
         fields = ['id', 'user', 'username', 'display_name', 'bio', 'avatar', 'created_at', 'updated_at']
         read_only_fields = ['user']
 
+    def validate(self, attrs):
+        request = self.context.get('request')
+
+        if (
+            request
+            and request.method == 'POST'
+            and request.user.is_authenticated
+            and UserProfile.objects.filter(user=request.user).exists()
+        ):
+            raise serializers.ValidationError('Profile already exists for this user.')
+
+        return attrs
+
 
 class CurrentUserSerializer(serializers.ModelSerializer):
     profile = UserProfileSerializer(read_only=True)
@@ -101,6 +114,22 @@ class PlaylistSerializer(serializers.ModelSerializer):
         ]
         read_only_fields = ['user']
 
+    def validate(self, attrs):
+        request = self.context.get('request')
+        user = request.user if request and request.user.is_authenticated else None
+        name = attrs.get('name', getattr(self.instance, 'name', None))
+
+        if user and name:
+            queryset = Playlist.objects.filter(user=user, name=name)
+
+            if self.instance:
+                queryset = queryset.exclude(pk=self.instance.pk)
+
+            if queryset.exists():
+                raise serializers.ValidationError({'name': 'You already have a playlist with this name.'})
+
+        return attrs
+
 
 class FavoriteSerializer(serializers.ModelSerializer):
     username = serializers.CharField(source='user.username', read_only=True)
@@ -111,3 +140,19 @@ class FavoriteSerializer(serializers.ModelSerializer):
         model = Favorite
         fields = ['id', 'user', 'username', 'track', 'track_id', 'created_at']
         read_only_fields = ['user']
+
+    def validate(self, attrs):
+        request = self.context.get('request')
+        user = request.user if request and request.user.is_authenticated else None
+        track = attrs.get('track', getattr(self.instance, 'track', None))
+
+        if user and track:
+            queryset = Favorite.objects.filter(user=user, track=track)
+
+            if self.instance:
+                queryset = queryset.exclude(pk=self.instance.pk)
+
+            if queryset.exists():
+                raise serializers.ValidationError({'track_id': 'This track is already in favorites.'})
+
+        return attrs

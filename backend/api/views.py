@@ -51,6 +51,9 @@ class PlaylistViewSet(viewsets.ModelViewSet):
         )
 
         if self.request.user.is_authenticated:
+            if self.request.method not in permissions.SAFE_METHODS:
+                return queryset.filter(user=self.request.user)
+
             return queryset.filter(Q(is_public=True) | Q(user=self.request.user)).distinct()
 
         return queryset.filter(is_public=True)
