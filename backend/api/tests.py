@@ -31,6 +31,8 @@ class CatalogApiTests(TestCase):
         self.playlist = Playlist.objects.create(user=self.user, name='Test Playlist')
         PlaylistTrack.objects.create(playlist=self.playlist, track=self.track, position=1)
         Favorite.objects.create(user=self.user, track=self.track)
+        self.other_user = get_user_model().objects.create_user(username='other-listener', password='password123')
+        self.other_playlist = Playlist.objects.create(user=self.other_user, name='Other Playlist')
 
     def test_artists_list_is_available_without_auth(self):
         response = self.client.get('/api/artists/')
@@ -64,6 +66,33 @@ class CatalogApiTests(TestCase):
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response.json()[0]['track']['title'], self.track.title)
 
+    def test_authenticated_user_cannot_update_another_users_public_playlist(self):
+        self.client.force_authenticate(user=self.user)
+
+        response = self.client.patch(
+            f'/api/playlists/{self.other_playlist.id}/',
+            {'name': 'Renamed by someone else'},
+            format='json',
+        )
+        self.other_playlist.refresh_from_db()
+
+        self.assertEqual(response.status_code, 404)
+        self.assertEqual(self.other_playlist.name, 'Other Playlist')
+
+    def test_duplicate_playlist_name_returns_validation_error(self):
+        self.client.force_authenticate(user=self.user)
+
+        response = self.client.post('/api/playlists/', {'name': self.playlist.name}, format='json')
+
+        self.assertEqual(response.status_code, 400)
+
+    def test_duplicate_favorite_returns_validation_error(self):
+        self.client.force_authenticate(user=self.user)
+
+        response = self.client.post('/api/favorites/', {'track_id': self.track.id}, format='json')
+
+        self.assertEqual(response.status_code, 400)
+
 
 class CurrentUserApiTests(TestCase):
     def setUp(self):
@@ -91,3 +120,10 @@ class CurrentUserApiTests(TestCase):
         self.assertEqual(data['username'], self.user.username)
         self.assertEqual(data['email'], self.user.email)
         self.assertEqual(data['profile']['display_name'], 'Test Listener')
+
+    def test_duplicate_profile_returns_validation_error(self):
+        self.client.force_authenticate(user=self.user)
+
+        response = self.client.post('/api/profiles/', {'display_name': 'Duplicate'}, format='json')
+
+        self.assertEqual(response.status_code, 400)

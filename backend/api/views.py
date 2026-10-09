@@ -1,8 +1,6 @@
 from django.db.models import Q
 from rest_framework import viewsets, permissions
 from rest_framework.decorators import api_view, permission_classes
-from rest_framework import viewsets, permissions, filters
-from rest_framework.decorators import api_view
 from rest_framework.response import Response
 
 from .filters import TrackFilter
@@ -52,6 +50,9 @@ class PlaylistViewSet(viewsets.ModelViewSet):
         )
 
         if self.request.user.is_authenticated:
+            if self.request.method not in permissions.SAFE_METHODS:
+                return queryset.filter(user=self.request.user)
+
             return queryset.filter(Q(is_public=True) | Q(user=self.request.user)).distinct()
 
         return queryset.filter(is_public=True)
