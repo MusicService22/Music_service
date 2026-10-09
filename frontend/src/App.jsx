@@ -5,6 +5,7 @@ import { Link, Route, Routes, useLocation } from 'react-router-dom'
 import FavoriteButton from './components/FavoriteButton'
 import FavoritesPage from './pages/FavoritesPage'
 import PlaylistsPage from './pages/PlaylistsPage'
+import PremiumPage from './pages/PremiumPage'
 
 const featuredTracks = [
   {
@@ -74,6 +75,7 @@ function App() {
           <a className="nav-link" href="#favorites">Favorites</a>
           <Link className="nav-link" to="/playlists">My playlists</Link>
           <Link className="nav-link" to="/favorites">My favorites</Link>
+          <Link className="nav-link" to="/premium">⭐ Premium</Link>
         </nav>
 
         <section className="library-block" aria-labelledby="library-title">
@@ -104,7 +106,8 @@ function App() {
         </header>
         <Routes>
           <Route path="/favorites" element={<FavoritesPage />} />
-          <Route path="/playlists" element={<PlaylistsPage />} />cd backend
+          <Route path="/playlists" element={<PlaylistsPage />} />
+          <Route path="/premium" element={<PremiumPage />} />
           <Route path="/" element={null} />
         </Routes>
 

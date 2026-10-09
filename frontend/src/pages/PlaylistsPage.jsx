@@ -18,7 +18,13 @@ export default function PlaylistsPage() {
       setPlaylists((prev) => [...prev, created])
       setName('')
     } catch (err) {
-      alert(err.response?.status === 401 ? 'Увійдіть в акаунт' : 'Не вдалося створити плейлист')
+      if (err.status === 401) {
+        alert('Увійдіть в акаунт')
+      } else if (err.status === 403) {
+        alert(err.message)
+      } else {
+        alert('Не вдалося створити плейлист')
+      }
     }
   }
 

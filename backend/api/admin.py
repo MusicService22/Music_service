@@ -1,6 +1,6 @@
 from django.contrib import admin
 
-from .models import Album, Artist, Favorite, Playlist, PlaylistTrack, Track, UserProfile
+from .models import Album, Artist, Favorite, Playlist, PlaylistTrack, Subscription, Track, UserProfile
 
 
 @admin.register(Artist)
@@ -48,3 +48,13 @@ class FavoriteAdmin(admin.ModelAdmin):
 class UserProfileAdmin(admin.ModelAdmin):
     list_display = ('id', 'user', 'display_name', 'created_at')
     search_fields = ('user__username', 'display_name')
+
+
+@admin.register(Subscription)
+class SubscriptionAdmin(admin.ModelAdmin):
+    list_display = ('id', 'user', 'started_at', 'expires_at', 'is_active')
+    search_fields = ('user__username',)
+
+    @admin.display(boolean=True, description='Активна')
+    def is_active(self, obj):
+        return obj.is_active

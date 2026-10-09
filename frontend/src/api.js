@@ -152,6 +152,12 @@ export const removeFavorite = (favoriteId) => apiClient.delete(`favorites/${favo
 
 export const getPlaylists = async () => unwrapList(await apiClient.get('playlists/'))
 export const createPlaylist = (name) => apiClient.post('playlists/', { name })
+
 export const deletePlaylist = (playlistId) => apiClient.delete(`playlists/${playlistId}/`)
+
+// ===== Premium =====
+export const getPremium = () => apiClient.get('premium/')
+export const activatePremium = () => apiClient.post('premium/activate/')
+export const cancelPremium = () => apiClient.post('premium/cancel/')
 
 export default api

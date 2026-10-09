@@ -12,8 +12,10 @@ export default function FavoriteButton({ trackId }) {
     try {
       await toggleFavorite(trackId)
     } catch (err) {
-      if (err.response?.status === 401) {
+      if (err.status === 401) {
         alert('Увійдіть в акаунт, щоб додавати в обране')
+      } else if (err.status === 403) {
+        alert(err.message)
       } else {
         console.error(err)
         alert('Не вдалося оновити обране')

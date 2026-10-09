@@ -1,5 +1,5 @@
 import { createContext, useCallback, useContext, useEffect, useState } from 'react'
-import { getFavorites, addFavorite, removeFavorite } from '../api'
+import { getFavorites, addFavorite, removeFavorite, getAccessToken } from '../api'
 
 const FavoritesContext = createContext(null)
 
@@ -8,7 +8,7 @@ export function FavoritesProvider({ children }) {
 
   // Завантажуємо обране, тільки якщо є токен (користувач увійшов)
   const reloadFavorites = useCallback(async () => {
-    if (!localStorage.getItem('access')) {
+    if (!getAccessToken()) {
       setFavorites([])
       return
     }

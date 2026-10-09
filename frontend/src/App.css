@@ -606,3 +606,40 @@ button {
   background: #ffffff;
   font: inherit;
 }
+
+/* ===== Premium (додано) ===== */
+.premium-plans {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 14px;
+  margin: 18px 0;
+}
+
+.premium-plan {
+  padding: 16px;
+  border: 1px solid #dce5db;
+  border-radius: 8px;
+  background: #ffffff;
+}
+
+.premium-plan h3 {
+  margin: 0 0 8px;
+}
+
+.premium-plan ul {
+  margin: 0;
+  padding-left: 18px;
+  color: #5d6861;
+  line-height: 1.7;
+}
+
+.premium-plan-pro {
+  border-color: #31785d;
+  background: #eef8f1;
+}
+
+@media (max-width: 720px) {
+  .premium-plans {
+    grid-template-columns: 1fr;
+  }
+}
