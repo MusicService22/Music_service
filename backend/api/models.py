@@ -1,6 +1,6 @@
 from django.conf import settings
 from django.db import models
-
+from django.utils import timezone
 
 class UserProfile(models.Model):
     user = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='profile')
@@ -114,3 +114,17 @@ class Favorite(models.Model):
 
     def __str__(self):
         return f'{self.user.username} likes {self.track.title}'
+
+class Subscription(models.Model):
+        user = models.OneToOneField(
+            settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='subscription'
+        )
+        started_at = models.DateTimeField(auto_now_add=True)
+        expires_at = models.DateTimeField()
+
+        @property
+        def is_active(self):
+            return self.expires_at > timezone.now()
+
+        def __str__(self):
+            return f'{self.user} до {self.expires_at:%Y-%m-%d}'

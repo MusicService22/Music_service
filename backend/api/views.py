@@ -1,10 +1,11 @@
 from django.db.models import Q
-from rest_framework import viewsets, permissions
+from rest_framework import viewsets, permissions, filters
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.response import Response
 
 from .filters import TrackFilter
 from .models import Album, Artist, Favorite, Playlist, Track, UserProfile
+from .premium import check_favorite_limit, check_playlist_limit  # ← PREMIUM
 from .serializers import (
     AlbumSerializer,
     ArtistSerializer,
@@ -58,6 +59,7 @@ class PlaylistViewSet(viewsets.ModelViewSet):
         return queryset.filter(is_public=True)
 
     def perform_create(self, serializer):
+        check_playlist_limit(self.request.user)  # ← PREMIUM
         serializer.save(user=self.request.user)
 
 
@@ -69,6 +71,7 @@ class FavoriteViewSet(viewsets.ModelViewSet):
         return Favorite.objects.select_related('user', 'track__artist', 'track__album').filter(user=self.request.user)
 
     def perform_create(self, serializer):
+        check_favorite_limit(self.request.user)  # ← PREMIUM
         serializer.save(user=self.request.user)
 
 
