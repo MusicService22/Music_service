@@ -1,0 +1,97 @@
+.search-page {
+  min-height: 100vh;
+  padding: 60px 20px;
+  background: #f5f5f5;
+}
+
+.search-container {
+  width: 100%;
+  max-width: 900px;
+  margin: 0 auto;
+}
+
+.search-container h1 {
+  margin-bottom: 10px;
+  font-size: 36px;
+}
+
+.search-description {
+  margin-bottom: 30px;
+  color: #666;
+}
+
+.search-form {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 30px;
+}
+
+.search-form input {
+  flex: 1;
+  padding: 14px 16px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  font-size: 16px;
+  outline: none;
+}
+
+.search-form input:focus {
+  border-color: #333;
+}
+
+.search-form button {
+  padding: 14px 24px;
+  border: none;
+  border-radius: 8px;
+  background: #222;
+  color: white;
+  font-size: 16px;
+  cursor: pointer;
+}
+
+.search-form button:hover {
+  background: #444;
+}
+
+.search-message {
+  padding: 20px 0;
+  color: #666;
+}
+
+.search-error {
+  padding: 15px;
+  border-radius: 8px;
+  background: #ffe5e5;
+  color: #b00020;
+}
+
+.tracks-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.track-card {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 20px;
+  background: white;
+  border-radius: 10px;
+  border: 1px solid #e5e5e5;
+}
+
+.track-card h2 {
+  margin: 0 0 6px;
+  font-size: 20px;
+}
+
+.track-card p {
+  margin: 0;
+  color: #666;
+}
+
+.track-duration {
+  color: #777;
+  font-size: 14px;
+}
