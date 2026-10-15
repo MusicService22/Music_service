@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+﻿import { useEffect, useState } from 'react'
 import { apiClient } from './api'
 import './App.css'
 import { Link, Route, Routes, useLocation } from 'react-router-dom'
@@ -6,6 +6,8 @@ import FavoriteButton from './components/FavoriteButton'
 import FavoritesPage from './pages/FavoritesPage'
 import PlaylistsPage from './pages/PlaylistsPage'
 import PremiumPage from './pages/PremiumPage'
+import Login from './pages/Login'
+import Search from './pages/Search'
 
 const featuredTracks = [
   {
@@ -48,7 +50,7 @@ const artists = ['Mila Ray', 'Anton Vale', 'Sana Blue', 'Kolo Sound']
 function App() {
     const { pathname } = useLocation()
   const isHome = pathname === '/'
-  const [status, setStatus] = useState('перевірка...')
+  const [status, setStatus] = useState('РїРµСЂРµРІС–СЂРєР°...')
 
   useEffect(() => {
     apiClient
@@ -75,7 +77,9 @@ function App() {
           <a className="nav-link" href="#favorites">Favorites</a>
           <Link className="nav-link" to="/playlists">My playlists</Link>
           <Link className="nav-link" to="/favorites">My favorites</Link>
-          <Link className="nav-link" to="/premium">⭐ Premium</Link>
+          <Link className="nav-link" to="/premium">в­ђ Premium</Link>
+          <Link className="nav-link" to="/login">Log in</Link>
+          <Link className="nav-link" to="/search">Music Search</Link>
         </nav>
 
         <section className="library-block" aria-labelledby="library-title">
@@ -108,6 +112,8 @@ function App() {
           <Route path="/favorites" element={<FavoritesPage />} />
           <Route path="/playlists" element={<PlaylistsPage />} />
           <Route path="/premium" element={<PremiumPage />} />
+          <Route path="/login" element={<Login />} />
+          <Route path="/search" element={<Search />} />
           <Route path="/" element={null} />
         </Routes>
 
@@ -231,3 +237,5 @@ function App() {
 }
 
 export default App
+
+
